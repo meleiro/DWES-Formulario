@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Indica que el documento es HTML5 -->
+    <meta charset="UTF-8"> <!-- Define la codificación de caracteres (UTF-8 soporta acentos, eñes, etc.) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Hace que el diseño sea adaptable en móviles -->
+    <title>Formulario de registro</title> <!-- Título que aparece en la pestaña del navegador -->
+</head>
+
+<body>
+    <!-- Formulario principal -->
+    <!-- action="/form": la URL a la que se enviarán los datos -->
+    <!-- method="POST": los datos se envían de forma segura en el cuerpo de la petición -->
+    <form action="/form" method="POST">
+
+        <!-- Campo de texto: NOMBRE -->
+        <label>Nombre:
+            <!-- Campo obligatorio gracias al atributo 'required' -->
+            <!-- value="<%= nombre || '' %>": si la variable 'nombre' existe, se rellena el campo con su valor;
+                 si no existe (undefined), se pone vacío ('') -->
+            <input type="text" name="nombre" value="<%= nombre || '' %>" required />
+        </label>
+        <p></p> <!-- Espacio visual -->
+
+        <!-- Campo numérico: EDAD -->
+        <label>Edad:
+            <!-- type="number": solo permite números -->
+            <!-- min="0": evita introducir valores negativos -->
+            <!-- value="<%= edad || '' %>": igual que antes, mantiene el valor en caso de error -->
+            <input type="number" name="edad" min="0" value="<%= edad || '' %>" />
+        </label>
+        <p></p>
+
+        <!-- Selector de CIUDAD -->
+        <label>Ciudad:
+            <select name="ciudad">
+                <option value="">-- Selecciona --</option>
+                <!-- Las siguientes opciones usan expresiones EJS -->
+                <!-- Ejemplo: si la variable ciudad === 'Madrid', entonces se añade el atributo 'selected' -->
+                <option value="Madrid" <%= ciudad === 'Madrid' ? 'selected' : '' %>>Madrid</option>
+                <option value="Barcelona" <%= ciudad === 'Barcelona' ? 'selected' : '' %>>Barcelona</option>
+                <option value="Valencia" <%= ciudad === 'Valencia' ? 'selected' : '' %>>Valencia</option>
+            </select>
+        </label>
+        <p></p>
+
+        <!-- GRUPO DE CHECKBOXES (intereses múltiples) -->
+        <!-- Cada checkbox tiene el mismo 'name' (intereses) para que al enviar se agrupen como un array -->
+        <fieldset>
+            <!-- Checkbox 1: Deportes -->
+            <label>
+                <input type="checkbox" name="intereses" value="deportes"
+                    <!-- Esta expresión EJS revisa si el array 'intereses' incluye el valor 'deportes' -->
+                    <!-- Si lo incluye, se agrega 'checked' al input, marcándolo -->
+                    <%= (intereses || []).includes('deportes') ? 'checked' : '' %> 
+                />
+                Deporte
+            </label>
+
+            <!-- Checkbox 2: Palomas -->
+            <label>
+                <input type="checkbox" name="intereses" value="palomas"
+                    <%= (intereses || []).includes('palomas') ? 'checked' : '' %> 
+                />
+                Palomas
+            </label>
+
+            <!-- Checkbox 3: Juegos -->
+            <label>
+                <input type="checkbox" name="intereses" value="juegos"
+                    <%= (intereses || []).includes('juegos') ? 'checked' : '' %> 
+                />
+                Juegos
+            </label>
+        </fieldset>
+        <p></p>
+
+        <!-- Botón de envío -->
+        <button type="submit">Enviar</button>
+    </form>
+
+    <!-- Enlace para volver al inicio -->
+    <p><a href="/">Volver al inicio</a></p>
+
+</body>
+</html>
