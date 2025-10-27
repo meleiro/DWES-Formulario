@@ -32,8 +32,24 @@ app.set("view engine", "ejs");
 //    - Sin esto, `req.body` vendría vacío.
 app.use(express.urlencoded({ extended: true }));
 
-//    Middleware para procesar peticiones con JSON (por ejemplo, APIs REST).
-app.use(express.json());
+
+
+app.use((req, res, next) => {
+
+    const ms = 10000; //10s
+
+    const timer = setTimeout(() => {
+        if (!res.headersSent){
+            console.warn("Tiempo de espera agotado");
+            res.status(408).send("Tiempo de espera agotado");
+        }
+    }, ms);
+
+    res.once("finish", () => clearTimeout(timer));
+    res.once("close", () => clearTimeout(timer));
+
+    next();
+});
 
 
 // ---------------------------------------------------------
@@ -83,7 +99,21 @@ app.post("/form", (req, res) => {
         errores.push("La ciudad no puede quedar vacía.");
     }
 
-   
+    //ha habido errores 400 Bad Request
+    if (errores.length) {
+        return res
+        .status(400)
+        .render("form", { nombre, edad, ciudad, intereses, errores });
+    }
+
+    res.render("resultado", {
+        nombre,
+        edad: edad || null,
+        ciudad,
+        intereses
+    });
+
+    
 });
 
 
@@ -94,3 +124,4 @@ app.listen(PORT, () => {
     // Mensaje de confirmación en consola cuando el servidor está activo.
     console.log(`Servidor escuchando en: http://localhost:${PORT}`);
 });
+
