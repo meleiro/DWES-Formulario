@@ -9,6 +9,24 @@
 </head>
 
 <body>
+
+    <%  if (typeof errores !== "undefined" && errores.length) { %>
+
+        <div style="color:red;">
+
+            <p>Per favoreee, corrige estos errores:</p>
+            <ul>
+                <%  
+                errores.forEach (e => { 
+                %>
+                    <li><%= e %></li>
+                <% }) %>
+            </ul>
+
+        </div>
+
+        <% } %>
+    
     <!-- Formulario principal -->
     <!-- action="/form": la URL a la que se enviarán los datos -->
     <!-- method="POST": los datos se envían de forma segura en el cuerpo de la petición -->
@@ -50,9 +68,8 @@
         <fieldset>
             <!-- Checkbox 1: Deportes -->
             <label>
-                <input type="checkbox" name="intereses" value="deportes"
-                    <!-- Esta expresión EJS revisa si el array 'intereses' incluye el valor 'deportes' -->
-                    <!-- Si lo incluye, se agrega 'checked' al input, marcándolo -->
+                <input type="checkbox" name="intereses" value="deportes"                   
+                    
                     <%= (intereses || []).includes('deportes') ? 'checked' : '' %> 
                 />
                 Deporte
@@ -85,3 +102,5 @@
 
 </body>
 </html>
+
+
