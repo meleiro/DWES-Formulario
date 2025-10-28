@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 
+        Declaramos el tipo de documento HTML5.
+        El atributo "lang" indica el idioma principal del contenido (en este caso, inglés).
+        Esto mejora la accesibilidad y el SEO.
+    -->
+    <meta charset="UTF-8">
+    <!-- 
+        Especifica la codificación de caracteres (UTF-8 permite acentos, eñes, etc.).
+        Es fundamental para evitar errores con caracteres especiales.
+    -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 
+        Hace que el diseño sea adaptable (responsive) en móviles y pantallas pequeñas.
+        "width=device-width" ajusta el ancho a la pantalla del dispositivo.
+        "initial-scale=1.0" establece el nivel de zoom inicial.
+    -->
+
+    <title>Resultado del formulario de mascotas:</title>
+    <!-- Título que aparece en la pestaña del navegador -->
+</head>
+
+<body>
+    <!-- Cuerpo principal del documento: aquí se mostrará la información al usuario -->
+    <h1>Resultado del formulario de mascotas:</h1>
+    <!-- Encabezado principal de la página -->
+
+    <!-- 
+        A continuación mostramos los valores recibidos desde el formulario.
+        Los valores se insertan con EJS (Embedded JavaScript) usando la sintaxis <%= ... %>
+        que imprime el resultado de la expresión en el HTML final.
+    -->
+
+     <!-- 
+        Mostramos el nombre de la mascota. 
+        Si la variable "nombre" está vacía o undefined, se mostrará "Sin nombre." como valor alternativo.
+        El operador || en JavaScript devuelve el primer valor verdadero (truthy).
+     -->
+     <p>Nombre: <%= nombre || "Sin nombre." %> </p>
+   
+    <!-- 
+        Bloque condicional EJS.
+        <% ... %> indica código JavaScript que se ejecuta del lado del servidor antes de generar la vista.
+        Aquí controlamos cómo mostrar la edad según su valor.
+    -->
+    <% if (edad === null) { %>
+        <!-- 
+            Si la variable "edad" no fue enviada o está vacía, 
+            se muestra este mensaje indicando que no se especificó.
+        -->
+        <p>Edad: no especificado</p>
+
+    <% } else if (edad < 0) { %>
+        <!-- 
+            Si la edad es un número negativo, mostramos un aviso personalizado.
+            (Ejemplo de validación básica de datos).
+        -->
+        <p>Edad: La edad es menor a la requerida (18)</p>
+
+    <% } else { %>
+        <!-- 
+            En cualquier otro caso (edad válida y no nula), 
+            mostramos directamente el valor de la edad.
+        -->
+        <p>Edad: <%= edad %> </p>
+    <% } %>
+   
+    <!-- 
+        Mostramos el tipo y tamaño del animal. 
+        De nuevo usamos el operador lógico OR (||) para mostrar un texto por defecto
+        en caso de que las variables estén vacías.
+    -->
+    <p>Tipo de animal: <%= tipo || "Sin tipo especificado." %></p>
+    <p>Tamaño del animal: <%= tamaño || "Sin tamaño especificado." %></p>
+
+    <!-- 
+        Bloque donde se muestran las actividades favoritas del animal.
+        Utilizamos una estructura condicional con EJS para comprobar 
+        si existe contenido en el array "actividades".
+    -->
+    <div>
+        <p>Sus actividades favoritas son: </p>
+
+        <% if(!actividades || actividades.length === 0) { %>
+            <!-- 
+                Si la variable "actividades" no existe o está vacía (longitud = 0),
+                se muestra un mensaje alternativo.
+            -->
+            <p>Ninguna actividad especificada</p>
+
+        <% } else { %>
+            <!-- 
+                Si sí hay actividades, las mostramos en una lista HTML (<ul> con <li>).
+                Aquí usamos un bucle forEach de JavaScript para recorrer el array.
+            -->
+            <ul>
+                <% actividades.forEach((acti) => { %>
+                    <!-- 
+                        Por cada elemento (actividad) del array "actividades", 
+                        creamos un elemento de lista <li> con su nombre dentro.
+                        <%= acti %> imprime el valor de la variable "acti".
+                    -->
+                    <li><%= acti %></li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </div>
+   
+    <!-- 
+        Enlaces de navegación.
+        Permiten al usuario volver al formulario o al inicio.
+        Estos enlaces se corresponden con rutas definidas en app.js
+        (por ejemplo: app.get("/form", ...) y app.get("/", ...)).
+    -->
+    <p><a href="/form">Formulario</a></p>
+    <p><a href="/">Volver al inicio</a></p>
+
+</body>
+</html>
