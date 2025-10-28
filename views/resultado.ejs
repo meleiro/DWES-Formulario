@@ -3,120 +3,112 @@
 <head>
     <!-- 
         Declaramos el tipo de documento HTML5.
-        El atributo "lang" indica el idioma principal del contenido (en este caso, inglés).
-        Esto mejora la accesibilidad y el SEO.
+        "lang" indica el idioma principal de la página (en este caso, inglés).
     -->
     <meta charset="UTF-8">
     <!-- 
-        Especifica la codificación de caracteres (UTF-8 permite acentos, eñes, etc.).
-        Es fundamental para evitar errores con caracteres especiales.
+        Establece la codificación de caracteres a UTF-8,
+        para que se muestren correctamente acentos y caracteres especiales.
     -->
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 
-        Hace que el diseño sea adaptable (responsive) en móviles y pantallas pequeñas.
-        "width=device-width" ajusta el ancho a la pantalla del dispositivo.
-        "initial-scale=1.0" establece el nivel de zoom inicial.
+        Hace que la página sea adaptable a diferentes dispositivos (responsive design).
     -->
-
-    <title>Resultado del formulario de mascotas:</title>
-    <!-- Título que aparece en la pestaña del navegador -->
+    <title>Resultado</title>
+    <!-- 
+        El texto que se mostrará en la pestaña del navegador.
+    -->
 </head>
 
 <body>
-    <!-- Cuerpo principal del documento: aquí se mostrará la información al usuario -->
-    <h1>Resultado del formulario de mascotas:</h1>
-    <!-- Encabezado principal de la página -->
+    <!-- 
+        Contenido principal del documento.
+    -->
+    <h1>Resumen de los datos</h1>
 
     <!-- 
-        A continuación mostramos los valores recibidos desde el formulario.
-        Los valores se insertan con EJS (Embedded JavaScript) usando la sintaxis <%= ... %>
-        que imprime el resultado de la expresión en el HTML final.
+        Mostramos los valores enviados desde el formulario.
+        <%= ... %> sirve para imprimir el valor de una variable en la página HTML.
     -->
+    <p><strong>Nombre:</strong> <%= nombre %></p>
+    <p><strong>Ciudad:</strong> <%= ciudad %></p>
 
-     <!-- 
-        Mostramos el nombre de la mascota. 
-        Si la variable "nombre" está vacía o undefined, se mostrará "Sin nombre." como valor alternativo.
-        El operador || en JavaScript devuelve el primer valor verdadero (truthy).
-     -->
-     <p>Nombre: <%= nombre || "Sin nombre." %> </p>
-   
+
     <!-- 
-        Bloque condicional EJS.
-        <% ... %> indica código JavaScript que se ejecuta del lado del servidor antes de generar la vista.
-        Aquí controlamos cómo mostrar la edad según su valor.
+        BLOQUE CONDICIONAL PARA LA EDAD
+        ----------------------------------------------------------
+        Usamos <% ... %> para escribir código JavaScript que se ejecuta 
+        antes de que el HTML llegue al navegador.
+        En este caso, comprobamos si el usuario ha indicado una edad.
     -->
-    <% if (edad === null) { %>
+    <% if (edad) { %>
+
+        <!-- Si hay valor en "edad", lo mostramos directamente -->
+        <p><strong>Edad: </strong> <%= edad %>   </p>
+
         <!-- 
-            Si la variable "edad" no fue enviada o está vacía, 
-            se muestra este mensaje indicando que no se especificó.
+            Subcondición: si la edad es mayor o igual a 18,
+            mostramos un mensaje en color verde indicando que es mayor de edad.
         -->
-        <p>Edad: no especificado</p>
+        <% if (Number(edad) >= 18) {  %>
 
-    <% } else if (edad < 0) { %>
-        <!-- 
-            Si la edad es un número negativo, mostramos un aviso personalizado.
-            (Ejemplo de validación básica de datos).
-        -->
-        <p>Edad: La edad es menor a la requerida (18)</p>
-
-    <% } else { %>
-        <!-- 
-            En cualquier otro caso (edad válida y no nula), 
-            mostramos directamente el valor de la edad.
-        -->
-        <p>Edad: <%= edad %> </p>
-    <% } %>
-   
-    <!-- 
-        Mostramos el tipo y tamaño del animal. 
-        De nuevo usamos el operador lógico OR (||) para mostrar un texto por defecto
-        en caso de que las variables estén vacías.
-    -->
-    <p>Tipo de animal: <%= tipo || "Sin tipo especificado." %></p>
-    <p>Tamaño del animal: <%= tamaño || "Sin tamaño especificado." %></p>
-
-    <!-- 
-        Bloque donde se muestran las actividades favoritas del animal.
-        Utilizamos una estructura condicional con EJS para comprobar 
-        si existe contenido en el array "actividades".
-    -->
-    <div>
-        <p>Sus actividades favoritas son: </p>
-
-        <% if(!actividades || actividades.length === 0) { %>
-            <!-- 
-                Si la variable "actividades" no existe o está vacía (longitud = 0),
-                se muestra un mensaje alternativo.
-            -->
-            <p>Ninguna actividad especificada</p>
+            <p style="color: green;">Eres mayor de edad</p>
 
         <% } else { %>
             <!-- 
-                Si sí hay actividades, las mostramos en una lista HTML (<ul> con <li>).
-                Aquí usamos un bucle forEach de JavaScript para recorrer el array.
+                Si la edad es menor de 18, mostramos otro mensaje en color naranja.
             -->
-            <ul>
-                <% actividades.forEach((acti) => { %>
-                    <!-- 
-                        Por cada elemento (actividad) del array "actividades", 
-                        creamos un elemento de lista <li> con su nombre dentro.
-                        <%= acti %> imprime el valor de la variable "acti".
-                    -->
-                    <li><%= acti %></li>
-                <% }) %>
-            </ul>
-        <% } %>
-    </div>
-   
-    <!-- 
-        Enlaces de navegación.
-        Permiten al usuario volver al formulario o al inicio.
-        Estos enlaces se corresponden con rutas definidas en app.js
-        (por ejemplo: app.get("/form", ...) y app.get("/", ...)).
-    -->
-    <p><a href="/form">Formulario</a></p>
-    <p><a href="/">Volver al inicio</a></p>
+            <p style="color: orange;">Eres menor de edad</p>
 
+        <% } %>    
+
+      <% } else { %>  
+        <!-- 
+            Si no se introdujo ninguna edad, se muestra este mensaje alternativo.
+        -->
+        <p>No indicaste edad</p>
+      <%  }  %>
+
+
+      <!-- 
+          SECCIÓN DE INTERESES
+          ----------------------------------------------------------
+          Aquí comprobamos si el usuario seleccionó uno o varios intereses en el formulario.
+          "intereses" es un array (lista) que puede estar vacío o tener valores.
+      -->
+      <h2>Intereses: </h2>
+
+      <% if (intereses && intereses.length) { %>
+        <!-- 
+            Si existe el array y tiene elementos, mostramos una lista con ellos (<ul><li>).
+        -->
+        <ul>
+           <% intereses.forEach(i => { %>
+                <!-- 
+                    Recorremos el array con forEach().
+                    Por cada elemento, imprimimos una línea de lista <li> con el valor.
+                -->
+                <li><%= i %></li>
+           <% }) %>
+        </ul>
+
+      <% } else { %>
+        <!-- 
+            Si el array está vacío o no existe, mostramos un mensaje alternativo.
+        -->
+        <p>Sin intereses</p>
+      <% } %> 
+      
+      <!-- 
+          ENLACES DE NAVEGACIÓN
+          ----------------------------------------------------------
+          Permiten al usuario regresar al formulario o ir al inicio de la aplicación.
+          Estas rutas corresponden a las definidas en app.js ("/form" y "/").
+      -->
+      <p>
+          <a href="/form">Volver al formulario</a>
+          <a href="/">Inicio</a>
+      </p>
+    
 </body>
 </html>
