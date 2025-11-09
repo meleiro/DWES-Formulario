@@ -6,17 +6,66 @@
     <title>Login</title>
 </head>
 <body>
+    <!-- 
+        Encabezado principal de la página.
+        Muestra el propósito de la vista: un formulario de inicio de sesión.
+    -->
     <h1>Login</h1>
 
+    <!-- 
+        Bloque condicional en EJS (Embedded JavaScript).
+        La sintaxis <% ... %> permite ejecutar código JavaScript dentro del HTML.
+        En este caso, comprobamos si existe una variable llamada 'error'
+        (que el servidor puede pasar al renderizar esta vista).
+        Si existe, se muestra el mensaje en un párrafo rojo.
+        <%= ... %> imprime el valor escapando caracteres peligrosos (seguro contra XSS).
+    -->
+    <% if (error) { %>
+        <p style="color:crimson;"><%= error %></p>
+    <% } %>
+
+    <!-- 
+        Formulario HTML que se envía al servidor para autenticar al usuario.
+        - method="POST": los datos se envían de forma segura en el cuerpo de la petición.
+        - action="/login": el formulario se enviará a la ruta POST /login del servidor Express.
+    -->
     <form method="POST" action="/login">
-        <label>  Usuario: <input type="text" name="usuario" required></label><br><br>
 
-        <label>  Contraseña: <input type="password" name="password" required></label><br><br>
+        <!-- 
+            Campo de texto para el nombre de usuario.
+            El atributo 'name="usuario"' es clave: Express lo usará para acceder al valor 
+            mediante 'req.body.usuario'.
+            El atributo 'required' obliga a rellenarlo antes de enviar el formulario.
+        -->
+        <label>
+            Usuario:
+            <input type="text" name="usuario" required>
+        </label>
+        <br><br>
 
+        <!-- 
+            Campo para la contraseña.
+            - type="password" oculta los caracteres introducidos.
+            - name="password" será accesible en el servidor como 'req.body.password'.
+        -->
+        <label>
+            Contraseña:
+            <input type="password" name="password" required>
+        </label>
+        <br><br>
+
+        <!-- 
+            Botón que envía el formulario al servidor.
+            Al hacer clic, se ejecuta la acción definida arriba (/login).
+        -->
         <button>Entrar</button>
 
     </form>
 
+    <!-- 
+        Enlace de navegación de vuelta al inicio del sitio.
+        Es útil para el usuario si quiere salir de la página de login.
+    -->
     <p><a href="/">Inicio</a></p>
     
 </body>
