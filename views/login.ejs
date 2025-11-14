@@ -14,11 +14,11 @@
 
     <!-- 
         Bloque condicional en EJS (Embedded JavaScript).
-        La sintaxis <% ... %> permite ejecutar código JavaScript dentro del HTML.
+        La sintaxis  permite ejecutar código JavaScript dentro del HTML.
         En este caso, comprobamos si existe una variable llamada 'error'
         (que el servidor puede pasar al renderizar esta vista).
         Si existe, se muestra el mensaje en un párrafo rojo.
-        <%= ... %> imprime el valor escapando caracteres peligrosos (seguro contra XSS).
+         el valor escapando caracteres peligrosos (seguro contra XSS).
     -->
     <% if (error) { %>
         <p style="color:crimson;"><%= error %></p>
