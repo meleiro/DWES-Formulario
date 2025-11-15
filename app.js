@@ -137,12 +137,62 @@ app.get("/perfil", requiereAuth, (req, res) => {
     res.render("perfil", { user });
 });
 
-// POST /logout → destruye la sesión y redirige al inicio.
+// Ruta GET que recibe un parámetro dinámico en la URL: /tema/claro , /tema/oscuro , etc.
+app.get("/tema/:modo", (req, res) => {
+
+    // Extraemos el valor del parámetro "modo" desde la URL.
+    // Ejemplo: si la URL es /tema/oscuro → modo = "oscuro".
+    const modo = req.params.modo;
+
+    // Guardamos el valor del modo en una cookie llamada "tema".
+    // Opciones de la cookie:
+    // - httpOnly:true → no accesible desde JavaScript del cliente (más seguro).
+    // - maxAge → duración de la cookie (aquí, 7 días).
+    res.cookie("tema", modo, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 días
+    });
+    
+    // Redirige a la ruta "/temas" después de guardar la cookie.
+    res.redirect("/temas");
+});
+
+
+// Ruta para borrar el tema guardado en la cookie.
+app.get("/borrar-tema", (req, res) => {
+
+    // Elimina la cookie llamada "tema".
+    res.clearCookie("tema");
+
+    // Redirige a la página donde se visualiza el tema.
+    res.redirect("/temas");
+});
+
+
+// Ruta que muestra la página con el modo de tema aplicado.
+app.get("/temas", (req, res) => {
+
+    // Recuperamos la cookie "tema".
+    // Si no existe, usamos "claro" como tema por defecto.
+    const tema = req.cookies.tema || "claro";
+
+    // Renderizamos la plantilla "temas.ejs", pasándole el tema actual.
+    res.render("temas", { tema });
+});
+
+
+// Ruta POST para cerrar sesión del usuario.
+// Elimina la sesión del servidor y redirige al inicio.
 app.post("/logout", (req, res) => {
+
+    // destroy elimina los datos de sesión almacenados en el servidor.
     req.session.destroy(() => {
+
+        // Una vez destruida la sesión, se redirige a la página principal.
         res.redirect("/");
     });
 });
+
 
 // -----------------------------------------------------------------------------
 //  RUTAS DE FORMULARIO CON VALIDACIÓN DE DATOS
