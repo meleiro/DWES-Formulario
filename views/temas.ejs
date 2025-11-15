@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- Indica que el documento usa HTML5 -->
+
+<html lang="en">
+<!-- Idioma principal del documento -->
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Codificación UTF-8 que permite caracteres especiales -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Hace que el diseño sea responsive en móviles -->
+
+    <title>Temas</title>
+    <!-- Título que aparece en la pestaña del navegador -->
+
+    <style>
+        /* 
+           Cada clase aplica un conjunto diferente de colores al body.
+           Esto permite alternar entre modo claro y oscuro sólo cambiando la clase del body.
+        */
+
+        body.claro {
+            background-color: #fff;  /* Fondo blanco */
+            color: #000;             /* Texto negro */
+        }
+
+        body.oscuro {
+            background-color: #222;  /* Fondo gris muy oscuro */
+            color: #fff;             /* Texto blanco */
+        }
+    </style>
+</head>
+
+<!-- 
+    El atributo class del body se asigna dinámicamente mediante EJS.
+    Si la variable "tema" vale "oscuro", se usará la clase "oscuro".
+    En caso contrario, se asignará "claro".
+-->
+<body class="<%= tema === 'oscuro' ? 'oscuro' : 'claro' %>">
+
+    <!-- Muestra al usuario cuál es el tema actualmente activo -->
+    <h1>Tema actual: <%= tema %></h1>
+
+    <p>
+        <!-- Enlaces que cambian el tema llamando a la ruta /tema/<modo> -->
+        <a href="/tema/claro">Tema claro</a>
+        <a href="/tema/oscuro">Tema oscuro</a>
+
+        <!-- Borra la cookie "tema" y vuelve al modo por defecto -->
+        <a href="/borrar-tema">Borrar cookie</a>
+    </p>
+
+    <p>
+        <!-- Enlace hacia una ruta de login -->
+        <a href="/login">Ir al login</a>
+    </p>
+
+</body>
+</html>
